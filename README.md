@@ -79,6 +79,28 @@ https://github.com/AlexGadjinski/Smart-Wallet-Web-Application
 
 ---
 
+## ⚙️ Running Locally / Setup
+
+This service uses a **Gmail account to send notifications** to users. To configure it locally, you need to set the following environment variables in your IDE via **Edit Configurations**:
+
+- `EMAIL_USERNAME` → the Gmail address used to send notifications
+- `EMAIL_PASSWORD` → the Gmail **App Password** for that account
+
+### Gmail App Password
+
+To send emails from Gmail, you must generate an **App Password** for the sender account:
+
+1. Go to **Manage your Google Account**.
+2. Search for **App passwords**.
+3. Create a new app password.
+4. Click **Generate**.
+5. Copy the 16-character password.
+6. Use this password as the value of `EMAIL_PASSWORD` in your IDE’s environment variables.
+
+> ⚠️ This Gmail account will be used to **send all notifications**. Do not use your personal Gmail password—only the generated App Password will work.
+
+---
+
 ## 🧪 Usage
 
 - The service runs independently from the Smart Wallet Web Application.
