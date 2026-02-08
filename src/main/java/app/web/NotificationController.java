@@ -46,6 +46,22 @@ public class NotificationController {
                 .body(preferenceResponse);
     }
 
+    /**
+     * NOTE: This endpoint is conceptually a PATCH (partial update),
+     * but for compatibility with clients (e.g., Feign) and ease of testing,
+     * we are using PUT here as a workaround.
+     */
+    @PutMapping("/preferences")
+    public ResponseEntity<NotificationPreferenceResponse> updateNotificationPreference(@RequestParam(name = "userId") UUID userId, @RequestParam(name = "enabled") boolean isEnabled) {
+
+        NotificationPreference notificationPreference = notificationService.updateNotificationPreference(userId, isEnabled);
+        NotificationPreferenceResponse preferenceResponse = DtoMapper.toNotificationPreferenceResponse(notificationPreference);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(preferenceResponse);
+    }
+
     @PostMapping
     public ResponseEntity<NotificationResponse> sendNotification(@RequestBody NotificationRequest notificationRequest) {
 

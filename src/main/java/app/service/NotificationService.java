@@ -106,4 +106,12 @@ public class NotificationService {
 
         return this.notificationRepository.findAllByUserIdAndDeletedFalseOrderByCreatedOnDesc(userId);
     }
+
+    public NotificationPreference updateNotificationPreference(UUID userId, boolean isEnabled) {
+
+        NotificationPreference preference = getPreferenceByUserId(userId).toBuilder()
+                .isEnabled(isEnabled)
+                .build();
+        return this.preferenceRepository.save(preference);
+    }
 }
