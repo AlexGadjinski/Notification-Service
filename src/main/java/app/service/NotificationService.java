@@ -114,4 +114,38 @@ public class NotificationService {
                 .build();
         return this.preferenceRepository.save(preference);
     }
+
+    public void clearNotificationHistory(UUID userId) {
+
+        List<Notification> notifications = getNotificationHistory(userId);
+
+        notifications.forEach(n -> n.setDeleted(true));
+        notificationRepository.saveAll(notifications);
+    }
+
+    public void retryFailedNotifications(UUID userId) {
+
+        List<Notification> failedNotifications = notificationRepository.findAllByUserIdAndStatusAndDeletedFalse(userId, NotificationStatus.FAILED);
+
+        NotificationPreference preference = getPreferenceByUserId(userId);
+        if (!preference.isEnabled()) {
+            throw new IllegalArgumentException("User with id [%s] has disabled notifications.".formatted(userId));
+        }
+
+        failedNotifications.forEach(notification -> {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(preference.getContactInfo());
+            message.setSubject(notification.getSubject());
+            message.setText(notification.getBody());
+
+            try {
+                this.mailSender.send(message);
+                notification.setStatus(NotificationStatus.SUCCEEDED);
+                notificationRepository.save(notification);
+
+            } catch (Exception e) {
+                log.warn("There was an issue sending an email to [%s] due to [%s]".formatted(preference.getContactInfo(), e.getMessage()));
+            }
+        });
+    }
 }

@@ -85,4 +85,30 @@ public class NotificationController {
                 .status(HttpStatus.OK)
                 .body(notificationResponses);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> clearNotificationHistory(@RequestParam(name = "userId") UUID userId) {
+
+        notificationService.clearNotificationHistory(userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    /**
+     * NOTE: This endpoint is conceptually a PATCH (partial update),
+     * but for compatibility with clients (e.g., Feign) and ease of testing,
+     * we are using PUT here as a workaround.
+     */
+    @PutMapping
+    public ResponseEntity<Void> retryFailedNotifications(@RequestParam(name = "userId") UUID userId) {
+
+        notificationService.retryFailedNotifications(userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
 }

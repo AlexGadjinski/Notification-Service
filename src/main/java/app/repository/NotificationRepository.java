@@ -1,6 +1,7 @@
 package app.repository;
 
 import app.model.Notification;
+import app.model.NotificationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,10 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
             ORDER BY n.createdOn DESC
             """)
     List<Notification> findAllByUserIdAndDeletedFalseOrderByCreatedOnDesc(UUID userId);
+
+    @Query("""
+            SELECT n FROM Notification AS n
+            WHERE n.userId = :userId AND n.isDeleted = false AND n.status = :status
+            """)
+    List<Notification> findAllByUserIdAndStatusAndDeletedFalse(UUID userId, NotificationStatus status);
 }
