@@ -27,10 +27,6 @@ The service is designed to operate independently and communicate with the Smart 
 - Currently supports **EMAIL** notifications.
 - Each notification is stored with its status (SUCCEEDED or FAILED).
 
----
-
-## 📜 Notification History
-
 ### 3. View Notification History
 - Users can retrieve their notification history.
 - Only notifications that are not cleared by the user are returned.
